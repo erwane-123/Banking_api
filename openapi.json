@@ -1,0 +1,234 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "API bancaire Java",
+    "version": "1.0.0",
+    "description": "API REST simple en Java pour gerer les comptes bancaires, les depots et les retraits."
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:8002"
+    }
+  ],
+  "tags": [
+    {
+      "name": "General",
+      "description": "Informations generales"
+    },
+    {
+      "name": "Accounts",
+      "description": "Gestion des comptes"
+    },
+    {
+      "name": "Transactions",
+      "description": "Operations bancaires"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": ["General"],
+        "summary": "Point d'entree de l'API",
+        "responses": {
+          "200": {
+            "description": "Message de bienvenue"
+          }
+        }
+      }
+    },
+    "/accounts": {
+      "get": {
+        "tags": ["Accounts"],
+        "summary": "Lister les comptes",
+        "responses": {
+          "200": {
+            "description": "Liste des comptes"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Accounts"],
+        "summary": "Creer un compte",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccountCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Compte cree"
+          },
+          "400": {
+            "description": "Donnees invalides"
+          }
+        }
+      }
+    },
+    "/accounts/{account_id}": {
+      "get": {
+        "tags": ["Accounts"],
+        "summary": "Consulter un compte",
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Compte detaille"
+          },
+          "404": {
+            "description": "Compte introuvable"
+          }
+        }
+      }
+    },
+    "/accounts/{account_id}/deposit": {
+      "post": {
+        "tags": ["Transactions"],
+        "summary": "Effectuer un depot",
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Depot effectue"
+          },
+          "404": {
+            "description": "Compte introuvable"
+          }
+        }
+      }
+    },
+    "/accounts/{account_id}/withdraw": {
+      "post": {
+        "tags": ["Transactions"],
+        "summary": "Effectuer un retrait",
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Retrait effectue"
+          },
+          "400": {
+            "description": "Solde insuffisant ou montant invalide"
+          },
+          "404": {
+            "description": "Compte introuvable"
+          }
+        }
+      }
+    },
+    "/accounts/{account_id}/transactions": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Lister les transactions",
+        "parameters": [
+          {
+            "name": "account_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Historique des transactions"
+          },
+          "404": {
+            "description": "Compte introuvable"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AccountCreate": {
+        "type": "object",
+        "required": ["full_name", "phone_number"],
+        "properties": {
+          "full_name": {
+            "type": "string",
+            "example": "KOA ESSAMA PAULIN BRICE"
+          },
+          "phone_number": {
+            "type": "string",
+            "example": "699001122"
+          },
+          "email": {
+            "type": "string",
+            "nullable": true,
+            "example": "paulin@example.com"
+          },
+          "initial_balance": {
+            "type": "number",
+            "example": 10000
+          }
+        }
+      },
+      "TransactionRequest": {
+        "type": "object",
+        "required": ["amount"],
+        "properties": {
+          "amount": {
+            "type": "number",
+            "example": 5000
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "example": "Depot agence"
+          }
+        }
+      }
+    }
+  }
+}
