@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # API bancaire Java
 
 Version Java simple du projet bancaire, sans framework externe, avec `HttpServer` du JDK.
@@ -28,3 +29,7 @@ java -cp out Main 8002
 ## Limite
 
 Les donnees sont conservees en memoire pendant l'execution du serveur.
+=======
+# Banking_api
+API bancaire Java 
+>>>>>>> 746fc39a1615cbc417d52982a6e6282c52344ccf
